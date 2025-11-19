@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Hero } from '../../models/hero.model';
 
 @Injectable()
@@ -16,6 +16,18 @@ export class HeroService {
 
   getHeroes(): Hero[] {
     return Array.from(this.HEROES).sort();
+  }
+
+  getHeroById(id: string): Hero {
+    const selectedHero = Array.from(this.HEROES).find(
+      (hero) => hero?.name.toLowerCase() === id.toLowerCase(),
+    );
+
+    if (!selectedHero) {
+      throw new NotFoundException();
+    }
+
+    return selectedHero;
   }
 
   private createOgryn(): Hero {
